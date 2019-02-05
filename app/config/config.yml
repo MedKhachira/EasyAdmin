@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi: ~
@@ -92,17 +92,35 @@ easy_admin:
         # change the following to the namespaces of your own entities
         News:
             class: AppBundle\Entity\News
+            controller: AppBundle\Controller\NewsController
             label: 'News'
             list:
                 title: "List News"
-                fields: ['title', 'text', { property: 'createdAt', label: 'createdAt' }, 'tags', 'enabled']
+                fields:
+                    - title
+                    - text
+                    - enabled
+                    - { property: 'image', type: 'image', base_path: '%app.path.news_images%' }
+                    - { property: 'createdAt', format: 'j / M / Y' }
+                    - tags
                 actions:
-                    - { name: 'show', icon: 'search', label: false }
-                    - { name: 'edit', icon: 'pencil', label: false }
+                    - { name: 'show', icon: 'search', label: "show" }
+                    - { name: 'edit', icon: 'pencil', label: "edit" }
+                    - { name: 'delete', icon: 'remove', label: "delete" }
             form:
                 fields:
                     - { property: 'title', css_class: 'large' }
                     - { property: 'text', type: 'fos_ckeditor' }
+                    - { property: 'tags' }
                     - { property: 'enabled', label: 'Published' }
                     - { property: 'createdAt' }
-                    - { property: 'imageFile', type: 'vich_image', type_options: { required: true } }    
+                    - { property: 'imageFile', type: 'vich_image', type_options: { required: true } }
+            show:
+                fields:
+                    - id
+                    - { property: 'title', css_class: 'large' }
+                    - text
+                    - { property: 'enabled', label: 'Published' }
+                    - createdAt
+                    - { property: 'image', type: 'image', base_path: '%app.path.news_images%' }
+                    - tags    
